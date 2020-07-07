@@ -7,8 +7,8 @@ import (
 	"os/exec"
 	"strings"
 
+	task "github.com/jprelph/oci-build-task"
 	"github.com/sirupsen/logrus"
-	task "github.com/vito/oci-build-task"
 	"github.com/vrischmann/envconfig"
 )
 

@@ -1,4 +1,4 @@
-module github.com/vito/oci-build-task
+module github.com/jprelph/oci-build-task
 
 go 1.12
 
