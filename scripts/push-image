@@ -33,7 +33,7 @@ esac
 exec /opt/resource/out . <<EOF
 {
   "source": {
-    "repository": "vito/oci-build-task",
+    "repository": "jprelph/oci-build-task",
     "tag": "$tag",
     "username": "$DOCKER_USERNAME",
     "password": "$DOCKER_PASSWORD"
