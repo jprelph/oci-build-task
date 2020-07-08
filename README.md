@@ -1,5 +1,9 @@
 # `oci-build` task
 
+A fork of [`vito/oci-build-task`](https://github.com/vito/oci-build-task) with
+support for authenticating against ECR using an IAM role. See * [`params`](#params)
+section for variables to set to enable ECR support.
+
 A Concourse task for building [OCI
 images](https://github.com/opencontainers/image-spec). Currently uses
 [`buildkit`](http://github.com/moby/buildkit) for building.
@@ -84,7 +88,7 @@ Next, any of the following optional parameters may be specified:
   repository (eg. `https://<account-number>.dkr.ecr.<region>.amazonaws.com`). This
   behaviour can be changed using the `$REGISTRIES` and `$REGION` flags.
 
-* `$REGISTRIES` (default empty): a list of account IDs to use in createing ECR
+* `$REGISTRIES` (default empty): a list of account IDs to use in creating ECR
   credentials. Optional use in conjunction with `$ECR` var.
 
 * `$REGION` (default eu-west-1): the region to use when creating ECR credentials.
