@@ -2,6 +2,7 @@ package task
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -54,44 +55,71 @@ func getRegistryIds() []string {
 	return registryIds
 }
 
-// GetECRLogin Creates Docker config.json via IAM role
-func GetECRLogin() {
+// GetLogin Creates Docker config.json via IAM role
+func GetLogin() {
 	var region = "eu-west-1"
 	awsRegion, exists := os.LookupEnv("REGION")
 	if exists {
 		region = awsRegion
 	}
 
-	// Create the ECR service config
-	awscfg, err := external.LoadDefaultAWSConfig()
-	if err != nil {
-		exitErrorf("failed to load config, %v", err)
-	}
-	if len(region) > 0 {
-		awscfg.Region = region
+	var email = ""
+	emailVar, exists := os.LookupEnv("EMAIL")
+	if exists {
+		email = emailVar
 	}
 
-	// Handle multiple registries
-	params := &ecr.GetAuthorizationTokenInput{
-		RegistryIds: getRegistryIds(),
-	}
+	var authConfig types.AuthConfig
+	var config configFile
+	config.AuthConfigs = make(map[string]types.AuthConfig)
 
-	// Create the ECR service client
-	svc := ecr.New(awscfg)
-	req := svc.GetAuthorizationTokenRequest(params)
-	resp, err := req.Send(context.TODO())
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		var authConfig types.AuthConfig
-		config := configFile{}
-		config.AuthConfigs = make(map[string]types.AuthConfig)
-		for _, auth := range resp.AuthorizationData {
-			authConfig.Auth = *auth.AuthorizationToken
-			authConfig.Email = "concourse@iptho.co.uk"
-			config.AuthConfigs[*auth.ProxyEndpoint] = authConfig
+	ecrLogin, exists := os.LookupEnv("LOGIN")
+	if exists {
+		useLogin := strings.ToUpper(ecrLogin)
+		if useLogin == "ECR" {
+			// Create the ECR service config
+			awscfg, err := external.LoadDefaultAWSConfig()
+			if err != nil {
+				exitErrorf("failed to load config, %v", err)
+			}
+			if len(region) > 0 {
+				awscfg.Region = region
+			}
+
+			// Handle multiple registries
+			params := &ecr.GetAuthorizationTokenInput{
+				RegistryIds: getRegistryIds(),
+			}
+
+			// Create the ECR service client
+			svc := ecr.New(awscfg)
+			req := svc.GetAuthorizationTokenRequest(params)
+			resp, err := req.Send(context.TODO())
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				for _, auth := range resp.AuthorizationData {
+					authConfig.Auth = *auth.AuthorizationToken
+					authConfig.Email = email
+					config.AuthConfigs[*auth.ProxyEndpoint] = authConfig
+				}
+			}
+		} else {
+			pass, exists := os.LookupEnv("PASS")
+			var url string
+			urlVar, exists := os.LookupEnv("REG_URL")
+			if exists {
+				url = urlVar
+			} else {
+				url = "https://index.docker.io/v1/"
+			}
+			if exists {
+				auth := base64.StdEncoding.EncodeToString([]byte(pass))
+				authConfig.Auth = auth
+				authConfig.Email = email
+				config.AuthConfigs[url] = authConfig
+			}
 		}
-
 		configJSON, err := json.Marshal(config)
 		if err != nil {
 			fmt.Println(err)

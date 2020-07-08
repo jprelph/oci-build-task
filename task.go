@@ -20,11 +20,11 @@ func Build(buildkitd *Buildkitd, outputsDir string, req Request) (Response, erro
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 
-	ecrLogin, exists := os.LookupEnv("ECR")
+	ecrLogin, exists := os.LookupEnv("LOGIN")
 	if exists {
-		useECR := strings.ToUpper(ecrLogin)
-		if useECR == "TRUE" {
-			GetECRLogin()
+		useLogin := strings.ToUpper(ecrLogin)
+		if useLogin == "ECR" || useLogin == "PASS" {
+			GetLogin()
 		}
 	}
 
