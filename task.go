@@ -1,6 +1,7 @@
 package task
 
 import (
+	"encoding/json"
 	"io"
 	"io/ioutil"
 	"os"
@@ -116,7 +117,7 @@ func Build(buildkitd *Buildkitd, outputsDir string, req Request) (Response, erro
 
 func unpackRootfs(dest string, image v1.Image, cfg Config) error {
 	rootfsDir := filepath.Join(dest, "rootfs")
-	// metadataPath := filepath.Join(dest, "metadata.json")
+	metadataPath := filepath.Join(dest, "metadata.json")
 
 	logrus.Info("unpacking image")
 
@@ -125,19 +126,14 @@ func unpackRootfs(dest string, image v1.Image, cfg Config) error {
 		return errors.Wrap(err, "unpack image")
 	}
 
-	// Not sure we need this with ContainerConfig Removed
-	/*
-		err = writeImageMetadata(metadataPath, image)
-		if err != nil {
-			return errors.Wrap(err, "write image metadata")
-		} */
+	err = writeImageMetadata(metadataPath, image)
+	if err != nil {
+		return errors.Wrap(err, "write image metadata")
+	}
 
 	return nil
 }
 
-// ContainerConfig removed from v1
-// See https://github.com/google/go-containerregistry/pull/546
-/*
 func writeImageMetadata(metadataPath string, image v1.Image) error {
 	cfg, err := image.ConfigFile()
 	if err != nil {
@@ -149,20 +145,14 @@ func writeImageMetadata(metadataPath string, image v1.Image) error {
 		return errors.Wrap(err, "create metadata file")
 	}
 
-		env := cfg.Config.Env
-			if len(env) == 0 {
-				env = cfg.ContainerConfig.Env
-			}
+	env := cfg.Config.Env
 
-			user := cfg.Config.User
-			if user == "" {
-				user = cfg.ContainerConfig.User
-			}
+	user := cfg.Config.User
 
-		err = json.NewEncoder(meta).Encode(ImageMetadata{
-			Env:  env,
-			User: user,
-		})
+	err = json.NewEncoder(meta).Encode(ImageMetadata{
+		Env:  env,
+		User: user,
+	})
 
 	if err != nil {
 		return errors.Wrap(err, "encode metadata")
@@ -174,7 +164,7 @@ func writeImageMetadata(metadataPath string, image v1.Image) error {
 	}
 
 	return nil
-} */
+}
 
 func sanitize(cfg *Config) error {
 	if cfg.ContextDir == "" {
