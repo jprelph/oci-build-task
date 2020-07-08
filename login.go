@@ -128,8 +128,6 @@ func GetLogin() {
 			return
 		}
 
-		fmt.Println(string(configJSON))
-
 		homeDir, err := os.UserHomeDir()
 		if err != nil {
 			fmt.Println(err)

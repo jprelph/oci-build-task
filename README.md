@@ -94,10 +94,10 @@ Next, any of the following optional parameters may be specified:
   in as ((username)):((password)). These will be base64 encoded and used in the
   ./docker/config.json file.
 
-* `$REG_URL` (default empty): if used with `$LOGIN` set to `PASS` this specifies
+* `$REG_URL` (default `"https://index.docker.io/v1/"`): if used with `$LOGIN` set to `PASS` this specifies
   the URL to be used for docker login.
 
-* `$REGISTRIES` (default `"https://index.docker.io/v1/"`): a list of account IDs to use when
+* `$REGISTRIES` (default empty): a list of account IDs to use when
  creating ECR credentials. Optional use in conjunction with `$ECR` var.
 
 * `$REGION` (default eu-west-1): the region to use when creating ECR credentials.
