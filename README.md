@@ -82,14 +82,23 @@ Next, any of the following optional parameters may be specified:
   format (`rootfs/`, `metadata.json`) for use with the [`image` task step
   option](https://concourse-ci.org/task-step.html#task-step-image).
 
-* `$ECR` (defauly empty): if set to `TRUE` the task will attempt to gain ECR
+* `$LOGIN` (defauly empty): if set to `ECR` the task will attempt to gain ECR
   credentials from AWS (using IAM role). The ECR credentials will be written
   to ~/.docker/config.json within the config and configured to the default account
   repository (eg. `https://<account-number>.dkr.ecr.<region>.amazonaws.com`). This
-  behaviour can be changed using the `$REGISTRIES` and `$REGION` flags.
+  behaviour can be changed using the `$REGISTRIES` and `$REGION` flags. If set to
+  `PASS` the task will use the `$PASS` field to populate the docker auth.
 
-* `$REGISTRIES` (default empty): a list of account IDs to use in creating ECR
-  credentials. Optional use in conjunction with `$ECR` var.
+* `$PASS` (default empty): if used with `$LOGIN` set to `PASS` this should include
+  the docker username/password in the form of `username:pass` - for example passed
+  in as ((username)):((password)). These will be base64 encoded and used in the
+  ./docker/config.json file.
+
+* `$REG_URL` (default `"https://index.docker.io/v1/"`): if used with `$LOGIN` set to `PASS` this specifies
+  the URL to be used for docker login.
+
+* `$REGISTRIES` (default empty): a list of account IDs to use when
+ creating ECR credentials. Optional use in conjunction with `$ECR` var.
 
 * `$REGION` (default eu-west-1): the region to use when creating ECR credentials.
 
