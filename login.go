@@ -106,6 +106,10 @@ func GetLogin() {
 			}
 		} else {
 			pass, exists := os.LookupEnv("PASS")
+			if !exists {
+				fmt.Println("PASS env var not set")
+				return
+			}
 			var url string
 			urlVar, exists := os.LookupEnv("REG_URL")
 			if exists {
@@ -113,12 +117,10 @@ func GetLogin() {
 			} else {
 				url = "https://index.docker.io/v1/"
 			}
-			if exists {
-				auth := base64.StdEncoding.EncodeToString([]byte(pass))
-				authConfig.Auth = auth
-				authConfig.Email = email
-				config.AuthConfigs[url] = authConfig
-			}
+			auth := base64.StdEncoding.EncodeToString([]byte(pass))
+			authConfig.Auth = auth
+			authConfig.Email = email
+			config.AuthConfigs[url] = authConfig
 		}
 		configJSON, err := json.Marshal(config)
 		if err != nil {
