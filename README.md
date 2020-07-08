@@ -91,14 +91,14 @@ Next, any of the following optional parameters may be specified:
 
 * `$PASS` (default empty): if used with `$LOGIN` set to `PASS` this should include
   the docker username/password in the form of `username:pass` - for example passed
-  in as ((username)):((password)). These will be bas64 encoded and used in the
+  in as ((username)):((password)). These will be base64 encoded and used in the
   ./docker/config.json file.
 
 * `$REG_URL` (default empty): if used with `$LOGIN` set to `PASS` this specifies
   the URL to be used for docker login.
 
-* `$REGISTRIES` (default `"https://index.docker.io/v1/"`): a list of account IDs to use in creating ECR
-  credentials. Optional use in conjunction with `$ECR` var.
+* `$REGISTRIES` (default `"https://index.docker.io/v1/"`): a list of account IDs to use when
+ creating ECR credentials. Optional use in conjunction with `$ECR` var.
 
 * `$REGION` (default eu-west-1): the region to use when creating ECR credentials.
 
