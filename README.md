@@ -82,7 +82,7 @@ Next, any of the following optional parameters may be specified:
   format (`rootfs/`, `metadata.json`) for use with the [`image` task step
   option](https://concourse-ci.org/task-step.html#task-step-image).
 
-* `$LOGIN` (defauly empty): if set to `ECR` the task will attempt to gain ECR
+* `$LOGIN` (default empty): if set to `ECR` the task will attempt to gain ECR
   credentials from AWS (using IAM role). The ECR credentials will be written
   to ~/.docker/config.json within the config and configured to the default account
   repository (eg. `https://<account-number>.dkr.ecr.<region>.amazonaws.com`). This
