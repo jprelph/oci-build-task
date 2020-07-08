@@ -102,6 +102,9 @@ func GetECRLogin() {
 		} else {
 			configDir := filepath.Join(homeDir, ".docker")
 			err := os.Setenv("DOCKER_CONFIG", configDir)
+			if _, err := os.Stat(configDir); os.IsNotExist(err) {
+				os.Mkdir(configDir, 0744)
+			}
 			if err != nil {
 				fmt.Println(err)
 			} else {
