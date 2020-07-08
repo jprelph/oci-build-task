@@ -78,6 +78,17 @@ Next, any of the following optional parameters may be specified:
   format (`rootfs/`, `metadata.json`) for use with the [`image` task step
   option](https://concourse-ci.org/task-step.html#task-step-image).
 
+* `$ECR` (defauly empty): if set to `TRUE` the task will attempt to gain ECR
+  credentials from AWS (using IAM role). The ECR credentials will be written
+  to ~/.docker/config.json within the config and configured to the default account
+  repository (eg. `https://<account-number>.dkr.ecr.<region>.amazonaws.com`). This
+  behaviour can be changed using the `$REGISTRIES` and `$REGION` flags.
+
+* `$REGISTRIES` (default empty): a list of account IDs to use in createing ECR
+  credentials. Optional use in conjunction with `$ECR` var.
+
+* `$REGION` (default eu-west-1): the region to use when creating ECR credentials.
+
 > Note: this is the main pain point with reusable tasks - env vars are kind of
 > an awkward way to configure a task. Once the RFC lands these will turn into a
 > JSON structure similar to configuring `params` on a resource, and task params

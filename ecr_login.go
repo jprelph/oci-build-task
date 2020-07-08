@@ -57,6 +57,10 @@ func getRegistryIds() []string {
 // GetECRLogin Creates Docker config.json via IAM role
 func GetECRLogin() {
 	var region = "eu-west-1"
+	awsRegion, exists := os.LookupEnv("REGION")
+	if exists {
+		region = awsRegion
+	}
 
 	// Create the ECR service config
 	awscfg, err := external.LoadDefaultAWSConfig()
