@@ -116,7 +116,7 @@ func Build(buildkitd *Buildkitd, outputsDir string, req Request) (Response, erro
 
 func unpackRootfs(dest string, image v1.Image, cfg Config) error {
 	rootfsDir := filepath.Join(dest, "rootfs")
-	metadataPath := filepath.Join(dest, "metadata.json")
+	// metadataPath := filepath.Join(dest, "metadata.json")
 
 	logrus.Info("unpacking image")
 
