@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -86,11 +88,29 @@ func GetECRLogin() {
 			config.AuthConfigs[*auth.ProxyEndpoint] = authConfig
 		}
 
-		dockerConfig, err := json.Marshal(config)
+		configJSON, err := json.Marshal(config)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(string(dockerConfig))
+
+		fmt.Println(string(configJSON))
+
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			configDir := filepath.Join(homeDir, ".docker")
+			err := os.Setenv("DOCKER_CONFIG", configDir)
+			if err != nil {
+				fmt.Println(err)
+			} else {
+				configFile := filepath.Join(configDir, "config.json")
+				err := ioutil.WriteFile(configFile, configJSON, 0644)
+				if err != nil {
+					fmt.Println(err)
+				}
+			}
+		}
 	}
 }
