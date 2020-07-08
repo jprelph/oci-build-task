@@ -125,14 +125,19 @@ func unpackRootfs(dest string, image v1.Image, cfg Config) error {
 		return errors.Wrap(err, "unpack image")
 	}
 
-	err = writeImageMetadata(metadataPath, image)
-	if err != nil {
-		return errors.Wrap(err, "write image metadata")
-	}
+	// Not sure we need this with ContainerConfig Removed
+	/*
+		err = writeImageMetadata(metadataPath, image)
+		if err != nil {
+			return errors.Wrap(err, "write image metadata")
+		} */
 
 	return nil
 }
 
+// ContainerConfig removed from v1
+// See https://github.com/google/go-containerregistry/pull/546
+/*
 func writeImageMetadata(metadataPath string, image v1.Image) error {
 	cfg, err := image.ConfigFile()
 	if err != nil {
@@ -144,9 +149,7 @@ func writeImageMetadata(metadataPath string, image v1.Image) error {
 		return errors.Wrap(err, "create metadata file")
 	}
 
-	// ContainerConfig removed from v1
-	// See https://github.com/google/go-containerregistry/pull/546
-	/*	env := cfg.Config.Env
+		env := cfg.Config.Env
 			if len(env) == 0 {
 				env = cfg.ContainerConfig.Env
 			}
@@ -159,7 +162,7 @@ func writeImageMetadata(metadataPath string, image v1.Image) error {
 		err = json.NewEncoder(meta).Encode(ImageMetadata{
 			Env:  env,
 			User: user,
-		}) */
+		})
 
 	if err != nil {
 		return errors.Wrap(err, "encode metadata")
@@ -171,7 +174,7 @@ func writeImageMetadata(metadataPath string, image v1.Image) error {
 	}
 
 	return nil
-}
+} */
 
 func sanitize(cfg *Config) error {
 	if cfg.ContextDir == "" {
