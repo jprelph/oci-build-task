@@ -1,4 +1,4 @@
-package ecr_login
+package task
 
 import (
 	"context"
