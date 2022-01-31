@@ -4,8 +4,9 @@ go 1.12
 
 require (
 	github.com/VividCortex/ewma v1.1.1 // indirect
+	github.com/aws/aws-sdk-go-v2 v0.24.0
 	github.com/concourse/go-archive v1.0.1
-	github.com/docker/docker v1.13.1 // indirect
+	github.com/docker/docker v1.13.1
 	github.com/fatih/color v1.9.0
 	github.com/google/go-containerregistry v0.1.1
 	github.com/mattn/go-colorable v0.1.7 // indirect
